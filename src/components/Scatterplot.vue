@@ -1,5 +1,5 @@
 <template>
-  <div class="vis-component">
+  <div class="vis-component" ref="chart">
     <div class="placeholder">
       <b>Here comes the scatterplot</b>.
       <p>Burglary rates for the selected year: {{ burglaryRates }}</p>

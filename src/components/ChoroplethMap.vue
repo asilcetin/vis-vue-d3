@@ -1,5 +1,5 @@
 <template>
-  <div class="vis-component">
+  <div class="vis-component" ref="chart">
     <div class="placeholder">
       <b>Here comes the choropleth map</b>.
       <p>Selected states by clicking on the bar chart: {{ selectedStates }}</p>
