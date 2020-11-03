@@ -7,16 +7,21 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     selectedYear: 1984,
+    selectedStates: [],
     burglaryRates: [],
     medianIncome: [],
   },
   mutations: {
     changeSelectedYear (state, year) {
       state.selectedYear = year;
-    }
+    },
+    changeSelectedState(state, val) {
+      state.selectedStates.push(val);
+    }   
   },
   getters: {
     selectedYear: (state) => state.selectedYear,
+    selectedStates: (state) => state.selectedStates,
     burglaryRates (state) {
       let result = [];
       for (let i = 0; i < state.burglaryRates.length; i++) {

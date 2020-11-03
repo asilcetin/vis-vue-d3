@@ -2,7 +2,7 @@
   <div class="vis-component">
     <div class="placeholder">
       <b>Here comes the choropleth map</b>.
-      <p>Median incomes for the selected year: {{ medianIncome }}</p>
+      <p>Selected states by clicking on the bar chart: {{ selectedStates }}</p>
     </div>
     <svg class="main-svg" :width="svgWidth" :height="svgHeight">
     </svg>
@@ -10,6 +10,9 @@
 </template>
 
 <script>
+
+import mapStatesUSA from '@/assets/us-states-geo.json';
+
 export default {
   name: 'ChoroplethMap',
   props: {
@@ -24,6 +27,8 @@ export default {
     }
   },
   mounted() {
+    // Use the following map geoJSON object ("mapStatesUSA") for your projection
+    console.log(mapStatesUSA);
   },
   methods: {
   },
@@ -36,6 +41,11 @@ export default {
     medianIncome: {
       get() {
         return this.$store.getters.medianIncome;
+      }
+    },
+    selectedStates: {
+      get() {
+        return this.$store.getters.selectedStates;
       }
     },
   },

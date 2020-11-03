@@ -59,7 +59,7 @@ export default {
         .attr('dy', '0.71em')
         .attr('text-anchor', 'end') 
         .attr('fill', 'black')
-        .text('Burglary Rates');
+        .text('Burglary Rate (per 100.000 people)');
     },
     drawBars() {
       const barsGroup = d3.select(this.$refs.barsGroup);
@@ -71,7 +71,11 @@ export default {
         .attr('y', (d) => this.yScale(d.value))
         .attr('width', this.xScale.bandwidth())
         .attr('height', (d) => this.svgHeight - this.svgPadding.top - this.svgPadding.bottom - this.yScale(d.value))
+        .on('click', (d) => this.handleBarClick(d.state));
     },
+    handleBarClick(val) {
+      this.$store.commit('changeSelectedState', val);
+    }
   },
   computed: {
     burglaryRates: {
