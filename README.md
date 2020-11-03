@@ -1,4 +1,4 @@
-# vis20w-vue
+# vis20w-vue-d3
 
 ## Project setup
 ```

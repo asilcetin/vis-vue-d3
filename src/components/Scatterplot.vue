@@ -35,7 +35,7 @@ export default {
     },
     medianIncome: {
       get() {
-        return this.$store.getters.burglaryRates;
+        return this.$store.getters.medianIncome;
       }
     },
   },
@@ -44,6 +44,5 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 </style>
