@@ -59,12 +59,12 @@ export default {
         .attr('dy', '0.71em')
         .attr('text-anchor', 'end') 
         .attr('fill', 'black')
-        .text('Burglary Rate (per 100.000 people)');
+        .text("Educational Attainment: Bachelor's Degree or Higher (%)");
     },
     drawBars() {
       const barsGroup = d3.select(this.$refs.barsGroup);
       barsGroup.selectAll('.bar')
-        .data(this.burglaryRates)
+        .data(this.educationRates)
         .join('rect')
         .attr('class', 'bar')
         .attr('x', (d) => this.xScale(d.state))
@@ -78,21 +78,21 @@ export default {
     }
   },
   computed: {
-    burglaryRates: {
+    educationRates: {
       get() {
-        return this.$store.getters.burglaryRates;
+        return this.$store.getters.educationRates;
       }
     },
     dataMax() {
-      return d3.max(this.burglaryRates, (d) => d.value);
+      return d3.max(this.educationRates, (d) => d.value);
     },
     dataMin() {
-      return d3.min(this.burglaryRates, (d) => d.value);
+      return d3.min(this.educationRates, (d) => d.value);
     },
     xScale() {
       return d3.scaleBand()
         .rangeRound([0, this.svgWidth - this.svgPadding.left - this.svgPadding.right]).padding(0.1)
-        .domain(this.burglaryRates.map((d) => d.state));
+        .domain(this.educationRates.map((d) => d.state));
     },
     yScale() {
       return d3.scaleLinear()
@@ -101,7 +101,7 @@ export default {
     },
   },
   watch: {
-    burglaryRates: {
+    educationRates: {
       handler() {
         this.drawChart();
       },

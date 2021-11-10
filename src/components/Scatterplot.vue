@@ -2,7 +2,7 @@
   <div class="vis-component" ref="chart">
     <div class="placeholder">
       <b>Here comes the scatterplot</b>.
-      <p>Burglary rates for the selected year: {{ burglaryRates }}</p>
+      <p>Education Attainment Rate for the Selected Year: {{ educationRates }}</p>
     </div>
     <svg class="main-svg" :width="svgWidth" :height="svgHeight">
     </svg>
@@ -28,14 +28,14 @@ export default {
   methods: {
   },
   computed: {
-    burglaryRates: {
+    educationRates: {
       get() {
-        return this.$store.getters.burglaryRates;
+        return this.$store.getters.educationRates;
       }
     },
-    medianIncome: {
+    personalIncome: {
       get() {
-        return this.$store.getters.medianIncome;
+        return this.$store.getters.personalIncome;
       }
     },
   },

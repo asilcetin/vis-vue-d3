@@ -6,10 +6,10 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    selectedYear: 1984,
+    selectedYear: 2006,
     selectedStates: [],
-    burglaryRates: [],
-    medianIncome: [],
+    educationRates: [],
+    personalIncome: [],
   },
   mutations: {
     changeSelectedYear (state, year) {
@@ -22,25 +22,25 @@ const store = new Vuex.Store({
   getters: {
     selectedYear: (state) => state.selectedYear,
     selectedStates: (state) => state.selectedStates,
-    burglaryRates (state) {
+    educationRates (state) {
       let result = [];
-      for (let i = 0; i < state.burglaryRates.length; i++) {
-        if (state.selectedYear in state.burglaryRates[i]) {
+      for (let i = 0; i < state.educationRates.length; i++) {
+        if (state.selectedYear in state.educationRates[i]) {
           result.push({
-            state: state.burglaryRates[i].State,
-            value: +state.burglaryRates[i][state.selectedYear]
+            state: state.educationRates[i].State,
+            value: +state.educationRates[i][state.selectedYear]
           })
         }
       }
       return result;
     },
-    medianIncome (state) {
+    personalIncome (state) {
       let result = [];
-      for (let i = 0; i < state.medianIncome.length; i++) {
-        if (state.selectedYear in state.medianIncome[i]) {
+      for (let i = 0; i < state.personalIncome.length; i++) {
+        if (state.selectedYear in state.personalIncome[i]) {
           result.push({
-            state: state.medianIncome[i].State,
-            value: state.medianIncome[i][state.selectedYear]
+            state: state.personalIncome[i].State,
+            value: state.personalIncome[i][state.selectedYear]
           })
         }
       }
@@ -49,12 +49,12 @@ const store = new Vuex.Store({
   },
   actions: {
     loadData({state}) {
-      d3.csv('./usa_burglary_rates_1980-2014.csv').then((data) => { 
-        state.burglaryRates = data;
+      d3.csv('./usa_ba-degree-or-higher_2006-2019.csv').then((data) => { 
+        state.educationRates = data;
       })
 
-      d3.csv('./usa_median_income_1984_2014.csv').then((data) => { 
-        state.medianIncome = data;
+      d3.csv('./usa_personal-income-by-state_2006-2019.csv').then((data) => { 
+        state.personalIncome = data;
       })
     },
   }
