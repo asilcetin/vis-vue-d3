@@ -1,7 +1,7 @@
 <template>
   <div class="vis-component" ref="chart">
     <svg id="main-svg" :width="svgWidth" :height="svgHeight">
-    <g class="chart-group" ref="chartGroup">
+      <g class="chart-group" ref="chartGroup">
         <g class="axis axis-x" ref="axisX"></g>
         <g class="axis axis-y" ref="axisY"></g>
         <g class="bars-group" ref="barsGroup"></g>
