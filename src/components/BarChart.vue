@@ -71,7 +71,7 @@ export default {
         .attr('y', (d) => this.yScale(d.value))
         .attr('width', this.xScale.bandwidth())
         .attr('height', (d) => this.svgHeight - this.svgPadding.top - this.svgPadding.bottom - this.yScale(d.value))
-        .on('click', (d) => this.handleBarClick(d.state));
+        .on('click', (event, d) => this.handleBarClick(d.state));
     },
     handleBarClick(val) {
       this.$store.commit('changeSelectedState', val);
