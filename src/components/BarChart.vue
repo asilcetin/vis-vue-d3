@@ -59,12 +59,12 @@ export default {
         .attr('dy', '0.71em')
         .attr('text-anchor', 'end') 
         .attr('fill', 'black')
-        .text("Educational Attainment: Bachelor's Degree or Higher (%)");
+        .text("Per Capita Disposable Personal Income by State");
     },
     drawBars() {
       const barsGroup = d3.select(this.$refs.barsGroup);
       barsGroup.selectAll('.bar')
-        .data(this.educationRates)
+        .data(this.disposablePersonaleIncome)
         .join('rect')
         .attr('class', 'bar')
         .attr('x', (d) => this.xScale(d.state))
@@ -78,21 +78,21 @@ export default {
     }
   },
   computed: {
-    educationRates: {
+    disposablePersonaleIncome: {
       get() {
-        return this.$store.getters.educationRates;
+        return this.$store.getters.disposablePersonaleIncome;
       }
     },
     dataMax() {
-      return d3.max(this.educationRates, (d) => d.value);
+      return d3.max(this.disposablePersonaleIncome, (d) => d.value);
     },
     dataMin() {
-      return d3.min(this.educationRates, (d) => d.value);
+      return d3.min(this.disposablePersonaleIncome, (d) => d.value);
     },
     xScale() {
       return d3.scaleBand()
         .rangeRound([0, this.svgWidth - this.svgPadding.left - this.svgPadding.right]).padding(0.1)
-        .domain(this.educationRates.map((d) => d.state));
+        .domain(this.disposablePersonaleIncome.map((d) => d.state));
     },
     yScale() {
       return d3.scaleLinear()
@@ -101,7 +101,7 @@ export default {
     },
   },
   watch: {
-    educationRates: {
+    disposablePersonaleIncome: {
       handler() {
         this.drawChart();
       },

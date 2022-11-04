@@ -33,14 +33,14 @@ export default {
   methods: {
   },
   computed: {
-    educationRates: {
+    disposablePersonaleIncome: {
       get() {
-        return this.$store.getters.educationRates;
+        return this.$store.getters.disposablePersonaleIncome;
       }
     },
-    personalIncome: {
+    burglaryRates: {
       get() {
-        return this.$store.getters.personalIncome;
+        return this.$store.getters.burglaryRates;
       }
     },
     selectedStates: {
