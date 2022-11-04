@@ -6,7 +6,7 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    selectedYear: 2004,
+    selectedYear: 1984,
     selectedStates: [],
     disposablePersonaleIncome: [],
     burglaryRates: [],
