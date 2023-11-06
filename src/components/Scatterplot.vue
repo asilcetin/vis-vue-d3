@@ -27,14 +27,14 @@ export default {
   methods: {
   },
   computed: {
-    disposablePersonaleIncome: {
+    personaleIncome: {
       get() {
-        return this.$store.getters.disposablePersonaleIncome;
+        return this.$store.getters.personaleIncome;
       }
     },
-    burglaryRates: {
+    baDegreeOrHigher: {
       get() {
-        return this.$store.getters.burglaryRates;
+        return this.$store.getters.baDegreeOrHigher;
       }
     },
   },

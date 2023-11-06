@@ -59,12 +59,12 @@ export default {
         .attr('dy', '0.71em')
         .attr('text-anchor', 'end') 
         .attr('fill', 'black')
-        .text("Per Capita Disposable Personal Income by State");
+        .text("Average Yearly Personal Income (in $)");
     },
     drawBars() {
       const barsGroup = d3.select(this.$refs.barsGroup);
       barsGroup.selectAll('.bar')
-        .data(this.disposablePersonaleIncome)
+        .data(this.personaleIncome)
         .join('rect')
         .attr('class', 'bar')
         .attr('x', (d) => this.xScale(d.state))
@@ -78,21 +78,21 @@ export default {
     }
   },
   computed: {
-    disposablePersonaleIncome: {
+    personaleIncome: {
       get() {
-        return this.$store.getters.disposablePersonaleIncome;
+        return this.$store.getters.personaleIncome;
       }
     },
     dataMax() {
-      return d3.max(this.disposablePersonaleIncome, (d) => d.value);
+      return Math.max(d3.max(this.personaleIncome, (d) => d.value), 85000);
     },
     dataMin() {
-      return d3.min(this.disposablePersonaleIncome, (d) => d.value);
+      return d3.min(this.personaleIncome, (d) => d.value);
     },
     xScale() {
       return d3.scaleBand()
         .rangeRound([0, this.svgWidth - this.svgPadding.left - this.svgPadding.right]).padding(0.1)
-        .domain(this.disposablePersonaleIncome.map((d) => d.state));
+        .domain(this.personaleIncome.map((d) => d.state));
     },
     yScale() {
       return d3.scaleLinear()
@@ -101,7 +101,7 @@ export default {
     },
   },
   watch: {
-    disposablePersonaleIncome: {
+    personaleIncome: {
       handler() {
         this.drawChart();
       },

@@ -6,10 +6,10 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    selectedYear: 1984,
+    selectedYear: 2006,
     selectedStates: [],
-    disposablePersonaleIncome: [],
-    burglaryRates: [],
+    personaleIncome: [],
+    baDegreeOrHigher: [],
   },
   mutations: {
     changeSelectedYear (state, year) {
@@ -22,25 +22,25 @@ const store = new Vuex.Store({
   getters: {
     selectedYear: (state) => state.selectedYear,
     selectedStates: (state) => state.selectedStates,
-    disposablePersonaleIncome (state) {
+    personaleIncome (state) {
       let result = [];
-      for (let i = 0; i < state.disposablePersonaleIncome.length; i++) {
-        if (state.selectedYear in state.disposablePersonaleIncome[i]) {
+      for (let i = 0; i < state.personaleIncome.length; i++) {
+        if (state.selectedYear in state.personaleIncome[i]) {
           result.push({
-            state: state.disposablePersonaleIncome[i].State,
-            value: +state.disposablePersonaleIncome[i][state.selectedYear]
+            state: state.personaleIncome[i].State,
+            value: +state.personaleIncome[i][state.selectedYear]
           })
         }
       }
       return result;
     },
-    burglaryRates (state) {
+    baDegreeOrHigher (state) {
       let result = [];
-      for (let i = 0; i < state.burglaryRates.length; i++) {
-        if (state.selectedYear in state.burglaryRates[i]) {
+      for (let i = 0; i < state.baDegreeOrHigher.length; i++) {
+        if (state.selectedYear in state.baDegreeOrHigher[i]) {
           result.push({
-            state: state.burglaryRates[i].State,
-            value: state.burglaryRates[i][state.selectedYear]
+            state: state.baDegreeOrHigher[i].State,
+            value: state.baDegreeOrHigher[i][state.selectedYear]
           })
         }
       }
@@ -49,12 +49,12 @@ const store = new Vuex.Store({
   },
   actions: {
     loadData({state}) {
-      d3.csv('./usa_disposable_personal_income_1984_2014.csv').then((data) => { 
-        state.disposablePersonaleIncome = data;
+      d3.csv('./usa_personal-income-by-state_2006-2019.csv').then((data) => { 
+        state.personaleIncome = data;
       })
 
-      d3.csv('./usa_burglary_rates_1984-2014.csv').then((data) => { 
-        state.burglaryRates = data;
+      d3.csv('./usa_ba-degree-or-higher_2006-2019.csv').then((data) => { 
+        state.baDegreeOrHigher = data;
       })
     },
   }
