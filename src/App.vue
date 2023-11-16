@@ -19,6 +19,7 @@
 </template>
 
 <script>
+// Hint: Replace 'BarChart' in this file with the Scatterplot
 import BarChart from './components/BarChart.vue';
 import ChoroplethMap from './components/ChoroplethMap.vue';
 import YearSlider from './components/YearSlider.vue';
