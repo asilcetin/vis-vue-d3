@@ -1,122 +1,116 @@
 <template>
   <div class="vis-component" ref="chart">
     <svg id="main-svg" :width="svgWidth" :height="svgHeight">
-      <g class="chart-group" ref="chartGroup">
-        <g class="axis axis-x" ref="axisX"></g>
-        <g class="axis axis-y" ref="axisY"></g>
-        <g class="bars-group" ref="barsGroup"></g>
+      <g 
+        class="chart-group" 
+        :transform="`translate(${svgPadding.left}, ${svgPadding.top})`"
+      >
+        <!-- X Axis -->
+        <g class="axis axis-x" 
+          :transform="`translate(0, ${svgHeight - svgPadding.top - svgPadding.bottom})`">
+          <line :x1="0" :x2="svgWidth - svgPadding.left - svgPadding.right"/>
+          <g v-for="(d, i) in personaleIncome" :key="i">
+            <line :x1="xScale(d.state)" :x2="xScale(d.state)" y1="0" y2="6" />
+            <text 
+              :x="xScale(d.state) + xScale.bandwidth() / 2" 
+              y="13" 
+              text-anchor="end" 
+              :transform="`rotate(-90, ${xScale(d.state) + xScale.bandwidth() / 2}, 10)`" 
+            >
+              {{ d.state }}
+            </text>
+          </g>
+        </g>
+        
+        <!-- Y Axis -->
+        <g class="axis axis-y" ref="axisY">
+          <line :y2="svgHeight - svgPadding.top - svgPadding.bottom"/>
+          <g v-for="(value, index) in yTicks" :key="index">
+            <line :y1="yScale(value)" :y2="yScale(value)" x1="-6" x2="0"/>
+            <text x="-10" :y="isNaN(yScale(value)) ? 0 : yScale(value) + 5" text-anchor="end">
+              {{ value }}
+            </text>
+          </g>
+        </g>
+
+        <!-- Bars -->
+        <g class="bars-group">
+          <rect 
+            v-for="(d, i) in personaleIncome" 
+            :key="i"
+            class="bar"
+            :x="xScale(d.state)"
+            :y="yScale(d.value)"
+            :width="xScale.bandwidth()"
+            :height="svgHeight - svgPadding.top - svgPadding.bottom - yScale(d.value)"
+            @click="handleBarClick(d.state)"
+          />
+        </g>
       </g>
     </svg>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import * as d3 from 'd3'; 
+import { useStore } from '@/stores/store.js';
 
-import * as d3 from 'd3';
+// Access the Pinia store
+const store = useStore();
 
-export default {
-  name: 'BarChart',
-  props: {
-  },
-  data() {
-    return {
-      svgWidth: 0,
-      svgHeight: 500,
-      svgPadding: {
-        top: 25, right: 20, bottom: 70, left: 40,
-      },
-    }
-  },
-  mounted() {
-    this.drawChart();
-  },
-  methods: {
-    drawChart() {
-      if (this.$refs.chart) this.svgWidth = this.$refs.chart.clientWidth;
-      d3.select(this.$refs.chartGroup)
-        .attr('transform', `translate(${this.svgPadding.left},${this.svgPadding.top})`);
-      this.drawXAxis();
-      this.drawYAxis();
-      this.drawBars();
-    },
-    drawXAxis() {
-      d3.select(this.$refs.axisX)
-        .attr('transform', `translate( 0, ${this.svgHeight - this.svgPadding.top - this.svgPadding.bottom} )`)
-        .call(d3.axisBottom(this.xScale))
-        .selectAll('text')
-        .attr('y', 0)
-        .attr('x', -7)
-        .attr('dy', '.35em')
-        .attr('transform', 'rotate(-90)')
-        .style('text-anchor', 'end');
-    },
-    drawYAxis() {
-      d3.select(this.$refs.axisY)
-        .call(d3.axisLeft(this.yScale))
-        .append('text')
-        .attr('transform', 'rotate(-90)')
-        .attr('y', 6)
-        .attr('dy', '0.71em')
-        .attr('text-anchor', 'end') 
-        .attr('fill', 'black')
-        .text("Average Yearly Personal Income (in $)");
-    },
-    drawBars() {
-      const barsGroup = d3.select(this.$refs.barsGroup);
-      barsGroup.selectAll('.bar')
-        .data(this.personaleIncome)
-        .join('rect')
-        .attr('class', 'bar')
-        .attr('x', (d) => this.xScale(d.state))
-        .attr('y', (d) => this.yScale(d.value))
-        .attr('width', this.xScale.bandwidth())
-        .attr('height', (d) => this.svgHeight - this.svgPadding.top - this.svgPadding.bottom - this.yScale(d.value))
-        .on('click', (event, d) => this.handleBarClick(d.state));
-    },
-    handleBarClick(val) {
-      this.$store.commit('changeSelectedState', val);
-    }
-  },
-  computed: {
-    personaleIncome: {
-      get() {
-        return this.$store.getters.personaleIncome;
-      }
-    },
-    dataMax() {
-      return Math.max(d3.max(this.personaleIncome, (d) => d.value), 85000);
-    },
-    dataMin() {
-      return d3.min(this.personaleIncome, (d) => d.value);
-    },
-    xScale() {
-      return d3.scaleBand()
-        .rangeRound([0, this.svgWidth - this.svgPadding.left - this.svgPadding.right]).padding(0.1)
-        .domain(this.personaleIncome.map((d) => d.state));
-    },
-    yScale() {
-      return d3.scaleLinear()
-        .rangeRound([this.svgHeight - this.svgPadding.top - this.svgPadding.bottom, 0])
-        .domain([this.dataMin > 0 ? 0 : this.dataMin, this.dataMax]);
-    },
-  },
-  watch: {
-    personaleIncome: {
-      handler() {
-        this.drawChart();
-      },
-      deep: true,
-    },
-  },
-}
+// Reactive variables
+const svgWidth = ref(500);
+const svgHeight = ref(500);
+const svgPadding = { top: 25, right: 20, bottom: 120, left: 60 };
+const chart = ref(null); // Initialize chart reference
+
+// Computed properties for data and scales
+const personaleIncome = computed(() => store.filteredPersonaleIncome);
+const dataMax = computed(() => Math.max(d3.max(personaleIncome.value, d => d.value), 85000));
+const dataMin = computed(() => d3.min(personaleIncome.value, d => d.value));
+
+const xScale = computed(() => 
+  d3.scaleBand()
+    .range([0, svgWidth.value - svgPadding.left - svgPadding.right])
+    .padding(0.1)
+    .domain(personaleIncome.value.map(d => d.state))
+);
+
+const yScale = computed(() => 
+  d3.scaleLinear()
+    .range([svgHeight.value - svgPadding.top - svgPadding.bottom, 0])
+    .domain([dataMin.value > 0 ? 0 : dataMin.value, dataMax.value])
+);
+
+const yTicks = computed(() => {
+  const tickCount = 5; 
+  const step = (dataMax.value - (dataMin.value > 0 ? 0 : dataMin.value)) / tickCount;
+  return Array.from({ length: tickCount + 1 }, (_, i) => Math.round((dataMin.value > 0 ? 0 : dataMin.value) + step * i));
+});
+
+// Handle bar click
+const handleBarClick = (state) => {
+  store.changeSelectedState(state);
+};
+
+// Adjust the SVG width based on the chart's client width
+onMounted(() => {
+  // Access the chart element and update svgWidth
+  if (chart.value) {
+    svgWidth.value = chart.value.clientWidth;
+  }
+});
 </script>
 
-<style>
+<style scoped>
 .bar {
   fill: steelblue;
 }
-
 .bar:hover {
   fill: lightblue;
+}
+.axis line {
+  stroke: black;
 }
 </style>

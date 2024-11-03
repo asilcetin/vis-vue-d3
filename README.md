@@ -19,7 +19,7 @@ npm install
 ### Compiles and hot-reloads for development
 Compiles your project code and makes the application available on a localhost instance that you can visit in your browser
 ```
-npm run serve
+npm run dev
 ```
 
 ### Compiles and minifies for production
@@ -28,15 +28,5 @@ This command will create a /dist folder in your project and output compiled file
 npm run build
 ```
 
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
 ### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+See [Vite Configuration Reference](https://vite.dev/config/).
